@@ -43,7 +43,7 @@ const tbody = document.getElementById("tbody");
 let mode = "create";
 let globalEditedID;
 let searchMode = localStorage.getItem("searchMode") || "title";
-handleSeachLocalStorage();
+handleSearchLocalStorage();
 let globalDeletedID;
 /* End Current Status */
 
@@ -417,17 +417,17 @@ function setSearchMode(searchID) {
     dropdownBtn.innerHTML = searchMode;
 
 
-    search.placeholder = `search by ${searchMode}`;
+    search.placeholder = `search by ${searchMode}` + (searchMode === "title" || searchMode === "category" ? "" : " (type only a number)");
     search.value = "";
     search.focus();
     localStorage.setItem("searchMode", searchMode);
     showData();
 }
 
-function handleSeachLocalStorage() {
+function handleSearchLocalStorage() {
     if (localStorage.getItem("searchMode")) {
         dropdownBtn.innerHTML = searchMode;
-        search.placeholder = `search by ${searchMode}`;
+        search.placeholder = `search by ${searchMode}` + (searchMode === "title" || searchMode === "category" ? "" : " (type only a number)");
         search.value = "";
     }
 }
