@@ -493,7 +493,7 @@ Array.from(colorBtns).forEach((btn) => {
 function handleExtraSpace() {
     if (localStorage.getItem("products")) {
         let newProducts = JSON.parse(localStorage.getItem("products")).map((product) => {
-            return { ...product, title: product.title.replace(/\s+/g, " "), category: product.category.replace(/\s+/g, " ") };
+            return { ...product, title: product.title.replace(/\s+/g, " ").trim(), category: product.category.replace(/\s+/g, " ").trim() };
         })
         localStorage.setItem("products", JSON.stringify(newProducts));
     }
