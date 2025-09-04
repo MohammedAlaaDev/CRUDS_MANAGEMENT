@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <title>CRUDS</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Changa", sans-serif;
+            overflow-x: hidden;
+        }
+
+        body.blue {
+            --main-color: #2456c2;
+            --secondary-color: #001f86;
+            --third-color: #00337c;
+            --gradient-color: linear-gradient(to right, rgb(59, 200, 255), rgb(0, 132, 255), rgb(0, 63, 199));
+            --shadow: rgb(44, 108, 245);
+        }
+
+        body.aqua {
+            --main-color: #1fadce;
+            --secondary-color: #073d49;
+            --third-color: #0d5d6e;
+            --gradient-color: linear-gradient(90deg, rgba(83, 237, 198, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(21, 128, 171, 1) 100%);
+            --shadow: #00cfff;
+        }
+
+        body.purple {
+            --main-color: #7b15b6;
+            --secondary-color: #370753;
+            --third-color: #560e80;
+            --gradient-color: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+            --shadow: #9f00fc;
+        }
+
+        body.red {
+            --main-color: #e91e45;
+            --secondary-color: #6e0d20;
+            --third-color: #a51431;
+            --gradient-color: radial-gradient(circle, rgba(126, 63, 251, 1) 0%, rgba(224, 68, 68, 1) 50%, rgba(252, 70, 112, 1) 100%);
+            --shadow: #ff0033;
+        }
+
+        .floating-animation {
+            background-image: url("./animation.gif");
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: -1;
+        }
+
+        .app {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 50px 100px;
+            gap: 30px;
+            background-color: rgba(0, 0, 0, 0.7);
+            margin: 0 auto;
+        }
+
+        @media(max-width: 1199px) {
+            .app {
+                padding: 50px;
+            }
+        }
+
+        .heading {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media(max-width:767px) {
+            .heading {
+                flex-direction: column;
+                justify-content: center;
+                gap: 20px;
+            }
+        }
+
+        .heading .info {
+            background-image: var(--gradient-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .heading .text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .heading .text>h3 {
+            color: white;
+            font-size: 20px;
+        }
+
+        .heading svg {
+            width: 30px;
+            height: 30px;
+            color: white;
+        }
+
+        .heading .colors {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .heading .colors .color.blue {
+            background-color: #2456c2;
+        }
+
+        .heading .colors .color.aqua {
+            background-color: #1fadce;
+        }
+
+        .heading .colors .color.purple {
+            background-color: #7b15b6
+        }
+
+        .heading .colors .color {
+            background-color: #e91e45;
+        }
+
+        .heading .colors .color {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+
+
+
+        .heading .colors .color::before {
+            position: absolute;
+            content: "";
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 3px solid rgb(87, 87, 87);
+            transition: 0.3s;
+        }
+
+        .heading .colors .color.active::before,
+        .heading .colors .color:hover::before {
+            border-color: white;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        h3 {
+            margin: 0 auto;
+            font-weight: bold;
+        }
+
+        .form {
+            width: 100%;
+        }
+
+        input,
+        button {
+            padding: 10px 20px;
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            color: white;
+        }
+
+        input {
+            background-color: var(--main-color);
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            box-shadow: 0px 0px 10px 5px var(--shadow);
+            scale: 1.05;
+            opacity: 1 !important;
+        }
+
+        input::placeholder {
+            color: white;
+        }
+
+        button,
+        .btn {
+            cursor: pointer !important;
+            background-color: var(--secondary-color);
+            transition: 0.3s !important;
+        }
+
+        .deletebtn {
+            background-color: var(--secondary-color) !important;
+            color: white !important;
+        }
+
+        button:hover {
+            box-shadow: 0px 0px 10px 5px var(--shadow) !important;
+            scale: 1.05 !important;
+        }
+
+        #title,
+        #count,
+        #category,
+        #search {
+            width: 100%;
+        }
+
+        .pricing {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        @media(max-width:1100px) {
+            .pricing {
+                flex-direction: column;
+            }
+
+            .pricing input {
+                width: 100%;
+            }
+        }
+
+        .pricing input {
+            flex: 1;
+        }
+
+        #total {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 5px;
+            background-color: rgb(240, 32, 32);
+            padding: 5px;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            min-width: 100px !important;
+            transition: 0.3s;
+        }
+
+        #totalText {
+            overflow-wrap: anywhere;
+        }
+
+        #category {
+            margin: 20px 0;
+        }
+
+        .submit-clear {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        #submit {
+            flex: 1;
+        }
+
+        #clear {
+            flex: 1;
+        }
+
+
+        #searchbtns {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            align-items: center;
+        }
+
+        #searchbtns button {
+            flex: 1;
+        }
+
+        #deleteAll {
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 10px !important;
+        }
+
+        table th {
+            color: white;
+            padding: 0 15px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        table td {
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        table tr td {
+            max-width: 100px;
+            overflow-wrap: break-word;
+        }
+
+        .container {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .modal-content {
+            background-color: var(--third-color);
+        }
+
+        #searchSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+            width: 100%;
+        }
+
+        @media(max-width:600px) {
+            #searchSection {
+                flex-direction: column;
+            }
+        }
+
+        #search-by {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        #search-by p {
+            margin: 0;
+            color: white;
+            min-width: 100px;
+        }
+
+        @media(max-width:600px) {
+            #search-by p {
+                font-size: 13px;
+            }
+        }
+
+        .dropdown .btn {
+            background-color: var(--main-color);
+            border: none;
+            outline: none;
+        }
+
+        @media(max-width:600px) {
+            .dropdown .btn {
+                font-size: 13px;
+            }
+        }
+
+        .dropdown .btn:active {
+            background-color: var(--third-color);
+        }
+
+        #search {
+            height: 100%;
+        }
+
+        .dropdown-menu {
+            background-color: var(--main-color);
+        }
+
+        .dropdown-menu li button {
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .dropdown-menu li button:hover {
+            color: white;
+            background-color: var(--third-color);
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="floating-animation"></div>
+
+    <div class="background">
+
+        <div class="app">
+            <div class="heading">
+                <div class="info">
+                    <h1>CRUDS System</h1>
+                    <h3>You can press "Enter" after you fill a required input.</h3>
+                </div>
+
+                <div class="theme">
+                    <div class="text">
+                        <svg class="svg-inline--fa fa-palette" aria-hidden="true" focusable="false" data-prefix="fas"
+                            data-icon="palette" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                            data-fa-i2svg="">
+                            <path fill="currentColor"
+                                d="M512 256c0 .9 0 1.8 0 2.7c-.4 36.5-33.6 61.3-70.1 61.3H344c-26.5 0-48 21.5-48 48c0 3.4 .4 6.7 1 9.9c2.1 10.2 6.5 20 10.8 29.9c6.1 13.8 12.1 27.5 12.1 42c0 31.8-21.6 60.7-53.4 62c-3.5 .1-7 .2-10.6 .2C114.6 512 0 397.4 0 256S114.6 0 256 0S512 114.6 512 256zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm0-96a32 32 0 1 0 0-64 32 32 0 1 0 0 64zM288 96a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm96 96a32 32 0 1 0 0-64 32 32 0 1 0 0 64z">
+                            </path>
+                        </svg>
+                        <h3>THEME</h3>
+                    </div>
+                    <div class="colors">
+                        <div class="blue color" data-color="blue">
+                        </div>
+                        <div class="aqua color" data-color="aqua">
+                        </div>
+                        <div class="purple color" data-color="purple">
+                        </div>
+                        <div class="red color" data-color="red">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form">
+                <input type="text" id="title" placeholder="title *">
+                <div class="pricing">
+                    <input onkeyup="handleTotalPrice()" type="number" id="price" placeholder="price *">
+                    <input onkeyup="handleTotalPrice()" type="number" id="taxes" placeholder="taxes *">
+                    <input onkeyup="handleTotalPrice()" type="number" id="ads" placeholder="ads *">
+                    <input onkeyup="handleTotalPrice()" type="number" id="discount" placeholder="discount *">
+                    <span id="total">Total: <span id="totalText"></span></span>
+                </div>
+                <input type="number" id="count" placeholder="count (optional - max 100)">
+                <input type="text" id="category" placeholder="category *">
+                <div class="submit-clear">
+                    <button id="submit" onclick="handleSubmit()">Create</button>
+                    <button id="clear" onclick="clearInputs()">Clear Inputs</button>
+                </div>
+            </div>
+            <div id="searchSection">
+                <div id="search-by">
+                    <p>Search By:</p>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false" id="dropdownBtn">
+                            title
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" href="#" onclick="setSearchMode(this.id)"
+                                    id="titleSearch">title</button></li>
+                            <li><button class="dropdown-item" href="#" onclick="setSearchMode(this.id)"
+                                    id="categorySearch">category</button></li>
+                            <li><button class="dropdown-item" href="#" onclick="setSearchMode(this.id)"
+                                    id="priceSearch">price</button></li>
+                            <li><button class="dropdown-item" href="#" onclick="setSearchMode(this.id)"
+                                    id="taxesSearch">taxes</button></li>
+                            <li><button class="dropdown-item" href="#" onclick="setSearchMode(this.id)"
+                                    id="adsSearch">ads</button></li>
+                            <li><button class="dropdown-item" href="#" onclick="setSearchMode(this.id)"
+                                    id="discountSearch">discount</button></li>
+                            <li><button class="dropdown-item" href="#" onclick="setSearchMode(this.id)"
+                                    id="totalSearch">total</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <input onkeyup="handleSearch()" type="text" id="search" placeholder="search by title">
+            </div>
+            <button id="deleteAll" class="btn deletebtn" type="button" data-bs-toggle="modal"
+                data-bs-target="#deleteAllModal"></button>
+
+
+            <div class="container">
+                <table id="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>TITLE</th>
+                        <th>PRICE</th>
+                        <th>TAXES</th>
+                        <th>ADS</th>
+                        <th>DISCOUNT</th>
+                        <th>TOTAL</th>
+                        <th>CATEGORY</th>
+                        <th>UPDATE</th>
+                        <th>DELETE</th>
+                    </tr>
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Delete Item?</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-white">
+                    This action can't be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn deletebtn" onclick="handleSingleDelete()"
+                        data-bs-dismiss="modal">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteAllModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Delete All Items?</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-white">
+                    All items will be lost.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn deletebtn" onclick="handleDeleteAll()"
+                        data-bs-dismiss="modal">Delete All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/script.js"></script>
+</body>
+
+
+</html>
