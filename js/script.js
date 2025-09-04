@@ -139,7 +139,8 @@ showData();
 function handleSubmit() {
     handleTotalPrice();
     if (title.value.trim() && price.value && taxes.value
-        && ads.value && discount.value && category.value.trim()) {
+        && ads.value && discount.value && category.value.trim() && isNaN(+title.value.trim()) &&
+        isNaN(+category.value.trim())) {
         if (mode === "create") {
             let newProduct = {
                 id: products.length,
@@ -227,9 +228,19 @@ function handleSubmit() {
         discount.placeholder = "discount *";
         category.placeholder = "category *";
 
+        handleExtraSpace();
+
     } else {
-        title.value = title.value.trim() === "" ? "" : title.value;
-        title.placeholder = title.value.trim() === "" ? "title is required" : "title *";
+
+        if (title.value.trim() === "") {
+            title.value = "";
+            title.style.opacity = "0.5";
+            title.placeholder = "title is required";
+        } else if (!(isNaN(+title.value.trim()))) {
+            title.value = "";
+            title.placeholder = "title must have at least one letter";
+            title.style.opacity = "0.5";
+        }
 
         price.value = price.value === "" ? "" : price.value;
         price.placeholder = price.value === "" ? "price is required" : "price *";
@@ -243,8 +254,15 @@ function handleSubmit() {
         discount.value = discount.value === "" ? "" : discount.value;
         discount.placeholder = discount.value === "" ? "discount is required" : "discount *";
 
-        category.value = category.value.trim() === "" ? "" : category.value;
-        category.placeholder = category.value.trim() === "" ? "category is required" : "category *";
+        if (category.value.trim() === "") {
+            category.value = "";
+            category.placeholder = "category is required";
+            category.style.opacity = "0.5";
+        } else if (!(isNaN(+category.value.trim()))) {
+            category.value = "";
+            category.placeholder = "category must have at least one letter";
+            category.style.opacity = "0.5";
+        }
 
         handleTotalPrice();
     }
@@ -419,13 +437,18 @@ function handleSeachLocalStorage() {
 /* Start handling search logic */
 function handleSearch() {
     let matched;
-    if (searchMode === "discount") {
+    if (searchMode === "title" || searchMode === "category") {
         matched = products.filter((product) => {
-            return product[searchMode].includes(Math.abs(Number(search.value)).toString());
+            return product[searchMode].toLowerCase().includes(search.value.toLowerCase());
+        })
+    } else if (searchMode === "total" && isNaN(+search.value)) {
+        matched = products.filter((product) => {
+            return product[searchMode].toLowerCase().includes(search.value.toLowerCase());
         })
     } else {
         matched = products.filter((product) => {
-            return product[searchMode].toLowerCase().includes(search.value.toLowerCase());
+            let cleanedValue = search.value.replace(/\s+/g, "");
+            return String(product[searchMode]) === Math.abs(Number(cleanedValue)).toString();
         })
     }
 
@@ -446,9 +469,14 @@ function handleSearch() {
         </tr>
         `;
     })
+
+    if (search.value.trim() === "") {
+        showData();
+    }
 }
 /* End handling search logic */
 
+/* handle changing the main color */
 Array.from(colorBtns).forEach((btn) => {
     btn.onclick = (e) => {
         Array.from(colorBtns).forEach((button) => {
@@ -459,3 +487,14 @@ Array.from(colorBtns).forEach((btn) => {
         localStorage.setItem("currentColortheme", e.target.dataset.color);
     }
 })
+/* === handle changing the main color === */
+
+// extra spaces
+function handleExtraSpace() {
+    if (localStorage.getItem("products")) {
+        let newProducts = JSON.parse(localStorage.getItem("products")).map((product) => {
+            return { ...product, title: product.title.replace(/\s+/g, " "), category: product.category.replace(/\s+/g, " ") };
+        })
+        localStorage.setItem("products", JSON.stringify(newProducts));
+    }
+}
