@@ -1,6 +1,9 @@
-// main products
-let products = JSON.parse(localStorage.getItem("products")) || [];
+if (!(localStorage.getItem("products"))) {
+    localStorage.setItem("products", JSON.stringify([{ id: 0, category: "Test", title: "Test Item", price: "50", taxes: "20", ads: "10", discount: "10", total: "70" }]))
+}
 
+// main products
+let products = JSON.parse(localStorage.getItem("products"));
 
 // inputs
 const title = document.getElementById("title");
@@ -43,7 +46,7 @@ const tbody = document.getElementById("tbody");
 let mode = "create";
 let globalEditedID;
 let searchMode = localStorage.getItem("searchMode") || "title";
-handleSearchLocalStorage();
+handleSeachLocalStorage();
 let globalDeletedID;
 /* End Current Status */
 
@@ -417,17 +420,17 @@ function setSearchMode(searchID) {
     dropdownBtn.innerHTML = searchMode;
 
 
-    search.placeholder = `search by ${searchMode}` + (searchMode === "title" || searchMode === "category" ? "" : " (type only a number)");
+    search.placeholder = `search by ${searchMode}`;
     search.value = "";
     search.focus();
     localStorage.setItem("searchMode", searchMode);
     showData();
 }
 
-function handleSearchLocalStorage() {
+function handleSeachLocalStorage() {
     if (localStorage.getItem("searchMode")) {
         dropdownBtn.innerHTML = searchMode;
-        search.placeholder = `search by ${searchMode}` + (searchMode === "title" || searchMode === "category" ? "" : " (type only a number)");
+        search.placeholder = `search by ${searchMode}`;
         search.value = "";
     }
 }
